@@ -1,0 +1,8 @@
+baseUrl: $PRIMARY_SITE_URL
+handle: default
+hasUrls: true
+language: en
+name: recipes
+primary: true
+siteGroup: 1c5b51e6-41ff-4941-9181-e3428036f30b # recipes
+sortOrder: 1

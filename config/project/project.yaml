@@ -1,0 +1,22 @@
+dateModified: 1764606150
+email:
+  fromEmail: admin@admin.admin
+  fromName: recipes
+  transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    1c5b51e6-41ff-4941-9181-e3428036f30b: recipes # recipes
+    07305713-956b-4990-b908-5ce9a96e4e3c: recipes # recipes
+system:
+  edition: solo
+  live: true
+  name: recipes
+  schemaVersion: 5.8.0.3
+  timeZone: America/Los_Angeles
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: null
+  require2fa: false
+  requireEmailVerification: true
