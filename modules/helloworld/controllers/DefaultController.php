@@ -2,17 +2,16 @@
 namespace modules\helloworld\controllers;
 
 use craft\web\Controller;
-use craft\web\Response;
+use yii\web\Response;
 
 class DefaultController extends Controller
 {
     protected int|bool|array $allowAnonymous = true;
 
-    public function actionIndex(): Response
+    public function actionIndex()
     {
-        // Verwende den Modul-Namen als Präfix für das Template
-        return $this->renderTemplate(
-            'hello-world/index',
+        return $this->render(
+            'index',
             [
                 'message' => 'Hello World aus dem Craft Modul 👋',
             ]

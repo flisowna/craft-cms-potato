@@ -3,7 +3,6 @@
 namespace modules\helloworld;
 
 use Craft; 
-use craft\web\View;
 use yii\base\Module;
 
 class HelloWorld extends Module {
@@ -14,7 +13,8 @@ class HelloWorld extends Module {
         // Controller Namespace setzen
         $this->controllerNamespace = 'modules\\helloworld\\controllers';
 
-        // Template-Pfad setzen, damit Craft die Templates findet
+        // Template-Pfad setzen, damit Craft die Templates im Modul findet
+        // basePath muss gesetzt sein, bevor viewPath gesetzt wird
         $this->setBasePath(__DIR__);
         $this->setViewPath(__DIR__ . '/templates');
 
