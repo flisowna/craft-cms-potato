@@ -1,72 +1,27 @@
+{% extends "_layout" %}
 {% set entry = craft.entries.section('home').one() %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{{ entry ? entry.title : 'Home' }}</title>
+{% block title %}{{ entry ? entry.title : 'Home' }}{% endblock %}
+
+{% block styles %}
   <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: -apple-system, system-ui, sans-serif;
-      background: #f7f7f7;
-      color: #1b1b1b;
-    }
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 20px;
-    }
+    .page { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
     .hero {
       display: grid;
       gap: 16px;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       align-items: start;
     }
-    .title {
-      font-size: clamp(28px, 4vw, 40px);
-      margin: 0 0 12px;
-    }
-    .lede {
-      margin: 0 0 16px;
-      line-height: 1.5;
-      color: #444;
-      white-space: pre-wrap;
-    }
-    .cta {
-      display: inline-block;
-      padding: 10px 14px;
-      background: #111;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-    .thumb {
-      background: #eaeaea;
-      min-height: 240px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .fallback {
-      color: #553;
-      text-align: center;
-      padding: 16px;
-    }
+    .title { font-size: clamp(28px, 4vw, 40px); margin: 0 0 12px; }
+    .lede { margin: 0 0 16px; line-height: 1.5; color: #444; white-space: pre-wrap; }
+    .cta { display: inline-block; padding: 10px 14px; background: #111; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; }
+    .thumb { background: #eaeaea; min-height: 240px; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .fallback { color: #553; text-align: center; padding: 16px; }
   </style>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <div class="page">
     {% if entry %}
       <div class="hero">
@@ -88,5 +43,4 @@
       </div>
     {% endif %}
   </div>
-</body>
-</html>
+{% endblock %}
