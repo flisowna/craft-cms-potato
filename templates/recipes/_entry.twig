@@ -1,0 +1,77 @@
+{% set entry = entry ?? craft.entries.id(craft.app.request.segment(2)).one() ?? null %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ entry ? entry.title : 'Recipe' }}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #f7f7f7; color: #1b1b1b; }
+    .page { max-width: 900px; margin: 0 auto; padding: 28px 18px 48px; }
+    .hero { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); align-items: start; margin-bottom: 24px; }
+    .title { margin: 0 0 8px; font-size: clamp(28px, 4vw, 40px); }
+    .lede { margin: 0 0 12px; color: #444; line-height: 1.5; white-space: pre-wrap; }
+    .meta { display: flex; gap: 12px; flex-wrap: wrap; margin: 0 0 12px; color: #555; font-size: 14px; }
+    .thumb { background: #eaeaea; min-height: 240px; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    h2 { margin: 24px 0 12px; font-size: 20px; }
+    ul { padding-left: 18px; margin: 0; }
+    li { margin: 4px 0; }
+    .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    .step { padding: 12px; background: #fff; border-radius: 6px; border: 1px solid #e5e5e5; }
+    .step img { width: 100%; border-radius: 6px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    {% if not entry %}
+      <p>No recipe found.</p>
+    {% else %}
+      <div class="hero">
+        <div>
+          <h1 class="title">{{ entry.title }}</h1>
+          {% if entry.shortDescription %}
+            <p class="lede">{{ entry.shortDescription|nl2br }}</p>
+          {% endif %}
+          <div class="meta">
+            {% if entry.cookingtime %}<span>⏱ {{ entry.cookingtime }} min</span>{% endif %}
+            {% if entry.difficulty %}<span>• Difficulty: {{ entry.difficulty.label ?? entry.difficulty }}</span>{% endif %}
+          </div>
+        </div>
+        <div class="thumb">
+          {% set hero = entry.foodimage.one() %}
+          {% if hero %}
+            <img src="{{ hero.url }}" alt="{{ entry.title }}">
+          {% else %}
+            <div style="color:#666;text-align:center;padding:12px;">Add a food image</div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if entry.ingredients|length %}
+        <h2>Ingredients</h2>
+        <ul>
+          {% for row in entry.ingredients %}
+            <li>{{ row.ingredient }}{% if row.amount %} — {{ row.amount }}{% endif %}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if entry.instructions|length %}
+        <h2>Steps</h2>
+        <ul class="steps">
+          {% for block in entry.instructions %}
+            <li class="step">
+              {% if block.shortDescription %}{{ block.shortDescription|nl2br }}{% endif %}
+              {% set img = block.stepImage.one() %}
+              {% if img %}<img src="{{ img.url }}" alt="Step image">{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endif %}
+  </div>
+</body>
+</html>
