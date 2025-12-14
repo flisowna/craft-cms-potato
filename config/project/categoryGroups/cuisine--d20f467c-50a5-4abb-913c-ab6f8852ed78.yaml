@@ -1,0 +1,51 @@
+defaultPlacement: end
+fieldLayouts:
+  9ffccaed-1208-4ef5-8b52-27cbbd18ca70:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2025-12-02T20:55:35+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            includeInCards: false
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            providesThumbs: false
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            uid: a9b34afc-879d-4289-ae2d-35a68b7101de
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 2c4c41e2-4be9-4419-960d-a671d0c88248
+        userCondition: null
+handle: cuisine
+name: Cuisine
+siteSettings:
+  07305713-956b-4990-b908-5ce9a96e4e3c: # recipes
+    hasUrls: true
+    template: cuisine/_category.twig
+    uriFormat: 'cuisine/{slug}'
+structure:
+  maxLevels: 1
+  uid: 6d89a611-ceb2-4836-b8b5-402309691fd2

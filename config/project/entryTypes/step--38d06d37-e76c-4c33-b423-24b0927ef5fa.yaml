@@ -1,0 +1,57 @@
+color: null
+description: null
+fieldLayouts:
+  ab4c9acb-6589-42a5-a4d2-cf9201536e77:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: '2025-12-12T17:04:04+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: da472e3c-2ae7-4552-a84c-4475b3d793f7 # shortDescription
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 1ff412da-08a7-40fd-8a3e-4e5cfda2691e
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: '2025-12-12T17:04:04+00:00'
+            editCondition: null
+            elementCondition: null
+            fieldUid: 457014d2-3f28-4023-bf62-eef7097c95b3 # stepImage
+            handle: null
+            includeInCards: false
+            instructions: null
+            label: null
+            providesThumbs: false
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f5228061-fa03-4611-b799-222c9b6aebcf
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: abd05b12-56ad-4b12-985d-852405d5cd4a
+        userCondition: null
+handle: step
+hasTitleField: false
+icon: null
+name: step
+showSlugField: true
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

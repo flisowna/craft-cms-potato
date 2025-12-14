@@ -1,12 +1,46 @@
-dateModified: 1764606150
+dateModified: 1765716120
 email:
   fromEmail: admin@admin.admin
   fromName: recipes
   transportType: craft\mail\transportadapters\Sendmail
+fs:
+  imagesFs:
+    hasUrls: true
+    name: Images
+    settings:
+      path: '@webroot/uploads/images'
+    type: craft\fs\Local
+    url: '@web/uploads/images'
 meta:
   __names__:
+    1b620557-d024-4172-af56-49d0d38a2cce: Instructions # Instructions
     1c5b51e6-41ff-4941-9181-e3428036f30b: recipes # recipes
+    2fc1a4da-5dad-4613-97ee-38a57da09e1b: Recipe # Recipe
+    3fa03a23-5428-4066-ab58-f7b42f5d0314: Ingredients # Ingredients
+    5e7a5d59-77f2-492d-8830-4f1c01e0252a: Difficulty # Difficulty
+    013af8f2-1b57-4b4e-9878-d03a570aab8d: Recipes # Recipes
+    17f0bd31-b996-4265-b560-fd3659ddfbbf: Images # Images
+    38d06d37-e76c-4c33-b423-24b0927ef5fa: step # step
+    61de6250-6b5a-434d-8fc0-a35f8a6c75b4: cookTime # cookTime
+    88a42142-d66b-4381-baeb-3794ef8c0e79: foodImage # foodImage
+    728d790c-3fb5-4d20-97ae-8726a276188a: heroImage # heroImage
+    3455a694-a54d-4ae1-9770-ec3470472499: 'Public Schema' # Public Schema
+    82430dba-f3d3-47a0-9fd9-1f1d6bd3d9bc: Home # Home
+    457014d2-3f28-4023-bf62-eef7097c95b3: stepImage # stepImage
     07305713-956b-4990-b908-5ce9a96e4e3c: recipes # recipes
+    bbba9543-9b7c-46d2-9145-909cc3428851: Cuisine # Cuisine
+    c0e14ed8-48d1-41c7-bd1b-acb402f50d68: Home # Home
+    c08e9d13-7dcb-4a46-b2c9-5f7d6667bb67: SEOtitle # SEOtitle
+    c863a39d-ab8f-4315-8021-9caa0f8ca82a: cookingTime # cookingTime
+    d0fa4e9a-62dc-4d3d-9659-4a74201f5169: Diet # Diet
+    d20f467c-50a5-4abb-913c-ab6f8852ed78: Cuisine # Cuisine
+    da472e3c-2ae7-4552-a84c-4475b3d793f7: shortDescription # shortDescription
+    e9a10ce9-54f4-4bbc-9fe2-99d775a46a6e: SEOdescription # SEOdescription
+plugins:
+  vite:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
 system:
   edition: solo
   live: true

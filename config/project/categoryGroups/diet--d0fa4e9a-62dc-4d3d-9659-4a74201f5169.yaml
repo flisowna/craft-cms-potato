@@ -1,0 +1,51 @@
+defaultPlacement: end
+fieldLayouts:
+  6264a9e5-a9b1-43ee-bb52-8f6de5ef83dd:
+    cardThumbAlignment: end
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            dateAdded: '2025-12-02T20:57:34+00:00'
+            disabled: false
+            elementCondition: null
+            id: null
+            includeInCards: false
+            inputType: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            providesThumbs: false
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            uid: 65f1c470-2598-46b8-b274-d8b11f3543d4
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 7ef1a59c-7e45-4f50-b6fd-28e7b6d03ff7
+        userCondition: null
+handle: diet
+name: Diet
+siteSettings:
+  07305713-956b-4990-b908-5ce9a96e4e3c: # recipes
+    hasUrls: true
+    template: diet/_category.twig
+    uriFormat: 'diet/{slug}'
+structure:
+  maxLevels: 1
+  uid: 6eddd17d-ced5-4d7b-8dbe-ca923b2d6b95
