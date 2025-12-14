@@ -1,0 +1,56 @@
+{% set recipes = craft.entries.section('recipes').limit(50).all() %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Recipes</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #f7f7f7; color: #1b1b1b; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 28px 18px 48px; }
+    h1 { margin: 0 0 16px; font-size: clamp(28px, 4vw, 36px); }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .card { background: #fff; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+    .thumb { background: #eaeaea; aspect-ratio: 4/3; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-body { padding: 12px; display: grid; gap: 8px; }
+    .title { margin: 0; font-size: 18px; }
+    .lede { margin: 0; color: #555; line-height: 1.4; max-height: 3.2em; overflow: hidden; }
+    .meta { color: #666; font-size: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .empty { color: #555; padding: 16px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Recipes</h1>
+    {% if recipes %}
+      <div class="grid">
+        {% for recipe in recipes %}
+          {% set img = recipe.foodimage.one() %}
+          <a class="card" href="{{ recipe.url }}">
+            <div class="thumb">
+              {% if img %}
+                <img src="{{ img.url }}" alt="{{ recipe.title }}">
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <h2 class="title">{{ recipe.title }}</h2>
+              {% if recipe.shortDescription %}
+                <p class="lede">{{ recipe.shortDescription|striptags|slice(0,140) ~ (recipe.shortDescription|length > 140 ? '…' : '') }}</p>
+              {% endif %}
+              <div class="meta">
+                {% if recipe.cookingtime %}<span>⏱ {{ recipe.cookingtime }} min</span>{% endif %}
+                {% if recipe.difficulty %}<span>• {{ recipe.difficulty.label ?? recipe.difficulty }}</span>{% endif %}
+              </div>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty">No recipes yet.</div>
+    {% endif %}
+  </div>
+</body>
+</html>
