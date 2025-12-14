@@ -12,7 +12,10 @@
   "autoload": {
     "psr-4": {
       "modules\\\\": "modules/"
-    }
+    },
+    "classmap": [
+      "modules/helloworld"
+    ]
   },
   "config": {
     "allow-plugins": {
