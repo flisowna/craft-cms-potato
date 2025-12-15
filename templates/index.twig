@@ -20,6 +20,20 @@
     .thumb { background: #eaeaea; min-height: 240px; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; }
     .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .fallback { color: #553; text-align: center; padding: 16px; }
+
+    /* SVG animation */
+    .svg-wrap {
+      margin-top: 32px;
+      background: #f9f7f2;
+      border: 1px solid #eee5d6;
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+    .svg-title { font-weight: 700; margin: 0 0 10px; }
+    .svg-stage { width: 100%; max-width: 520px; margin: 0 auto; aspect-ratio: 210 / 297; }
+    .svg-stage svg { width: 100%; height: 100%; display: block; }
+    .svg-hint { margin-top: 8px; color: #777; font-size: 14px; text-align: center; }
   </style>
 {% endblock %}
 
@@ -43,6 +57,167 @@
           {% endif %}
         </div>
       </div>
+
+      <div class="svg-wrap">
+        <div class="svg-title">Animated network</div>
+        <div id="svg-anim" class="svg-stage" aria-hidden="true"></div>
+        <div class="svg-hint">Branches draw from the center; dots pop in after.</div>
+      </div>
     {% endif %}
   </div>
+
+  <script src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const target = document.getElementById('svg-anim');
+      if (!target) return;
+
+      fetch('/uploads/images/potatoes-heros.svg', { cache: 'no-cache' })
+        .then(r => r.text())
+        .then(svgText => {
+          const parser = new DOMParser();
+          const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+          const svgEl = svgDoc.querySelector('svg');
+          if (!svgEl) return;
+
+          const branchGroup = svgEl.querySelector('#branches2, #branches');
+          const branches = branchGroup?.querySelectorAll('path') || [];
+          const dots = svgEl.querySelectorAll('#dotss path');
+          const center = svgEl.querySelector('#center-5');
+
+          gsap.set(svgEl, { width: '100%', height: '100%', display: 'block' });
+          gsap.set(branches, { opacity: 1 });
+          gsap.set(dots, { opacity: 0, scale: 0.72, transformOrigin: '50% 50%' });
+          if (center) {
+            center.setAttribute('fill', '#111');
+            gsap.set(center, { opacity: 1, transformOrigin: '50% 50%' });
+          }
+          if (branchGroup) gsap.set(branchGroup, { opacity: 0 });
+
+          const [vbX = 0, vbY = 0, vbW = 210, vbH = 297] = (svgEl.getAttribute('viewBox') || '')
+            .split(/\s+/).map(n => Number.isFinite(+n) ? +n : 0);
+          let revealCx = vbX + vbW / 2, revealCy = vbY + vbH / 2, revealMaxR = Math.hypot(vbW, vbH);
+
+          let defs = svgEl.querySelector('defs') || svgEl.insertBefore(
+            document.createElementNS('http://www.w3.org/2000/svg', 'defs'), svgEl.firstChild
+          );
+
+          const ns = 'http://www.w3.org/2000/svg';
+          const mask = document.createElementNS(ns, 'mask');
+          mask.id = 'branches-reveal-mask';
+          mask.setAttribute('maskUnits', 'userSpaceOnUse');
+
+          const maskRect = document.createElementNS(ns, 'rect');
+          maskRect.setAttribute('fill', 'black');
+
+          const blobGroup = document.createElementNS(ns, 'g');
+          const blobCircles = Array.from({ length: 29 }, (_, i) => {
+            const c = document.createElementNS(ns, 'circle');
+            c.setAttribute('r', '0');
+            c.setAttribute('fill', 'white');
+            if (i === 0) {
+              Object.assign(c.dataset, { dxN: 0, dyN: 0, rScale: 1, delay: 0, dur: 3.8 });
+            } else {
+              const spread = Math.random() < 0.22 ? gsap.utils.random(2.8, 5.2) : gsap.utils.random(0.4, 2.6);
+              const angle = gsap.utils.random(0, Math.PI * 2);
+              const mag = Math.pow(Math.random(), 0.55) * spread;
+              Object.assign(c.dataset, {
+                dxN: Math.cos(angle) * mag,
+                dyN: Math.sin(angle) * mag,
+                rScale: gsap.utils.random(0.14, 1.42) * (Math.random() < 0.14 ? 1.55 : 1),
+                delay: gsap.utils.random(0, 1.25),
+                dur: gsap.utils.random(1.2, 6.2)
+              });
+              c.setAttribute('opacity', String(gsap.utils.random(0.04, 0.92)));
+            }
+            blobGroup.append(c);
+            return c;
+          });
+
+          mask.append(maskRect, blobGroup);
+          defs.append(mask);
+
+          branchGroup?.setAttribute('mask', 'url(#branches-reveal-mask)');
+          target.innerHTML = '';
+          target.appendChild(svgEl);
+
+          requestAnimationFrame(() => {
+            const branchesBox = branchGroup?.getBBox?.();
+            const centerBox = center?.getBBox?.();
+            const validBox = b => b && b.width > 0 && b.height > 0;
+            const boxCenter = b => [b.x + b.width / 2, b.y + b.height / 2];
+
+            if (validBox(branchesBox)) {
+              [revealCx, revealCy] = validBox(centerBox) ? boxCenter(centerBox) : boxCenter(branchesBox);
+              const pad = Math.max(branchesBox.width, branchesBox.height) * 0.35;
+              const mx = branchesBox.x - pad, my = branchesBox.y - pad;
+              const mw = branchesBox.width + pad * 2, mh = branchesBox.height + pad * 2;
+
+              [mask, maskRect].forEach(el => {
+                el.setAttribute('x', mx); el.setAttribute('y', my);
+                el.setAttribute('width', mw); el.setAttribute('height', mh);
+              });
+
+              revealMaxR = Math.max(
+                Math.hypot(mx - revealCx, my - revealCy),
+                Math.hypot(mx + mw - revealCx, my - revealCy),
+                Math.hypot(mx - revealCx, my + mh - revealCy),
+                Math.hypot(mx + mw - revealCx, my + mh - revealCy)
+              );
+            }
+
+            const blobBaseOffset = validBox(branchesBox)
+              ? Math.min(branchesBox.width, branchesBox.height) * 0.22
+              : Math.min(vbW, vbH) * 0.12;
+
+            blobCircles.forEach(c => {
+              const dx = Number(c.dataset.dxN) * blobBaseOffset;
+              const dy = Number(c.dataset.dyN) * blobBaseOffset;
+              c.dataset.targetCx = revealCx + dx;
+              c.dataset.targetCy = revealCy + dy;
+              c.setAttribute('cx', revealCx);
+              c.setAttribute('cy', revealCy);
+            });
+
+            const DOTS_START = 1.15;
+            const DOTS_DUR = 2.1;
+            const DOTS_STAGGER_EACH = 0.32;
+            const DOTS_END = DOTS_START + DOTS_DUR + Math.max(0, (dots.length - 1) * DOTS_STAGGER_EACH);
+            const REVEAL_END = 3.85;
+
+            const tl = gsap.timeline();
+            tl.to(branchGroup || [], { opacity: 1, duration: 0.9, ease: 'sine.out' }, 0)
+              .to(blobCircles, {
+                attr: {
+                  r: (_, t) => revealMaxR * Number(t.dataset.rScale),
+                  cx: (_, t) => Number(t.dataset.targetCx),
+                  cy: (_, t) => Number(t.dataset.targetCy)
+                },
+                duration: (_, t) => Number(t.dataset.dur),
+                stagger: (_, t) => Number(t.dataset.delay),
+                ease: 'none'
+              }, 0)
+              .to(dots, { opacity: 1, scale: 1, duration: DOTS_DUR, stagger: { each: DOTS_STAGGER_EACH, from: 'random' }, ease: 'power2.out' }, DOTS_START)
+              .call(() => {
+                branchGroup?.removeAttribute('mask');
+                gsap.set(branches, { opacity: 1 });
+              }, [], REVEAL_END);
+
+            const pulseTargets = [...dots, center].filter(Boolean);
+            if (pulseTargets.length) {
+              tl.add(() => {
+                gsap.timeline({ repeat: -1, repeatDelay: 2.2 })
+                  .to(pulseTargets, { scale: 1.04, duration: 0.34, ease: 'sine.out' })
+                  .to(pulseTargets, { scale: 1, duration: 0.54, ease: 'sine.inOut' })
+                  .to(pulseTargets, { scale: 1.02, duration: 0.28, ease: 'sine.out' }, '+=0.14')
+                  .to(pulseTargets, { scale: 1, duration: 0.62, ease: 'sine.inOut' });
+              }, DOTS_END);
+            }
+          });
+        })
+        .catch(() => {
+          target.innerHTML = '<div class="fallback">SVG failed to load.</div>';
+        });
+    });
+  </script>
 {% endblock %}
