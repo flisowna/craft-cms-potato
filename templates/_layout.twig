@@ -29,17 +29,24 @@
   {% block styles %}{% endblock %}
 </head>
 <body>
-  <header>
-    <a class="logo" href="{{ siteUrl }}">
-      <span class="dot"></span>
-      <span>Recipes</span>
-    </a>
-  </header>
+  {% set renderHeader = renderHeader is defined ? renderHeader : true %}
+  {% set renderFooter = renderFooter is defined ? renderFooter : true %}
+
+  {% if renderHeader %}
+    <header>
+      <a class="logo" href="{{ siteUrl }}">
+        <span class="dot"></span>
+        <span>Recipes</span>
+      </a>
+    </header>
+  {% endif %}
 
   {% block content %}{% endblock %}
 
-  <footer>
-    <div style="color:#666; font-size:14px; padding: 0 18px;">© {{ "now"|date("Y") }} Recipes</div>
-  </footer>
+  {% if renderFooter %}
+    <footer>
+      <div style="color:#666; font-size:14px; padding: 0 18px;">© {{ "now"|date("Y") }} Recipes</div>
+    </footer>
+  {% endif %}
 </body>
 </html>
