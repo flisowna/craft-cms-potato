@@ -5,14 +5,14 @@
 
 {% block styles %}
   <style>
-    .page { max-width: 1100px; margin: 0 auto; padding: 28px 18px 48px; }
+    .page { max-width: 1100px; margin: 0 auto; padding: 48px 18px 48px; }
     h1 { margin: 0 0 16px; font-size: clamp(28px, 4vw, 36px); }
     .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
     .card { background: #fbf5e6; border: 1px solid #111; border-radius: 8px; overflow: hidden; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
     .thumb { aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; padding: 12px; }
     .thumb img, .thumb object { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
     .card-body { padding: 12px; display: grid; gap: 8px; }
-    .title { margin: 0; font-size: 18px; }
+    .title { margin: 0; font-size: 18px; color: #9B3A42; }
     .lede { margin: 0; color: #555; line-height: 1.4; }
     .meta { color: #666; font-size: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
     .empty { color: #555; padding: 16px; }
@@ -21,7 +21,6 @@
 
 {% block content %}
   <div class="page">
-    <h1>Recipes</h1>
     {% if recipes %}
       <div class="grid">
         {% for recipe in recipes %}
