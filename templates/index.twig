@@ -7,33 +7,40 @@
 
 {% block styles %}
   <style>
-    .page { max-width: 960px; margin: 0 auto; padding: 32px 20px; }
+    .page { max-width: 960px; margin: 0 auto; padding: 24px 20px; height: 100vh; display: flex; align-items: center; }
     .hero {
       display: grid;
       gap: 16px;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      align-items: start;
+      grid-template-columns: 1fr;
+      align-items: center;
+      width: 100%;
     }
     .title { font-size: clamp(28px, 4vw, 40px); margin: 0 0 12px; }
     .lede { margin: 0 0 16px; line-height: 1.5; color: #444; white-space: pre-wrap; }
-    .cta { display: inline-block; padding: 10px 14px; background: #111; color: #fff; text-decoration: none; border-radius: 6px; font-weight: 600; }
-    .thumb { background: #eaeaea; min-height: 240px; display: flex; align-items: center; justify-content: center; border-radius: 6px; overflow: hidden; }
-    .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .fallback { color: #553; text-align: center; padding: 16px; }
 
-    /* SVG animation */
-    .svg-wrap {
-      margin-top: 32px;
-      background: #f9f7f2;
-      border: 1px solid #eee5d6;
-      border-radius: 12px;
-      padding: 18px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    .title-link {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 16px;
+      width: 0.6em;
+      height: 0.6em;
+      border-right: 4px solid #111;
+      border-bottom: 4px solid #111;
+      transform: rotate(-45deg);
+      transition: border-color 0.2s, transform 0.15s;
     }
-    .svg-title { font-weight: 700; margin: 0 0 10px; }
-    .svg-stage { width: 100%; max-width: 520px; margin: 0 auto; aspect-ratio: 210 / 297; }
+    .title-link:hover { border-color: #666; }
+    .title-link:active { transform: rotate(-45deg) translateX(6px); }
+
+    /* SVG animation */
+    .hero-visual {
+      width: 100%;
+    }
+    .svg-stage { width: min(100%, calc(70vh * 1.45)); margin: 0 auto; aspect-ratio: 187.5 / 129; }
     .svg-stage svg { width: 100%; height: 100%; display: block; }
-    .svg-hint { margin-top: 8px; color: #777; font-size: 14px; text-align: center; }
+    .hero-copy { text-align: right; }
+
   </style>
 {% endblock %}
 
@@ -41,27 +48,15 @@
   <div class="page">
     {% if entry %}
       <div class="hero">
-        <div>
-          <h1 class="title">{{ entry.title }}</h1>
+        <div class="hero-visual">
+          <div id="svg-anim" class="svg-stage" aria-hidden="true"></div>
+        </div>
+        <div id="hero-copy" class="hero-copy">
+          <h1 class="title">{{ entry.title }}<a class="title-link" href="{{ url('recipes') }}" aria-label="Browse recipes"></a></h1>
           {% if entry.shortDescription %}
             <p class="lede">{{ entry.shortDescription|nl2br }}</p>
           {% endif %}
-          <a class="cta" href="{{ url('recipes') }}">Browse recipes →</a>
         </div>
-        <div class="thumb">
-          {% set heroAsset = entry.heroimage.one() ?? entry.foodimage.one() ?? entry.stepimage.one() %}
-          {% if heroAsset %}
-            <img src="{{ heroAsset.url }}" alt="{{ entry.title }}">
-          {% else %}
-            <div class="fallback">Add a hero image to the Home entry.</div>
-          {% endif %}
-        </div>
-      </div>
-
-      <div class="svg-wrap">
-        <div class="svg-title">Animated network</div>
-        <div id="svg-anim" class="svg-stage" aria-hidden="true"></div>
-        <div class="svg-hint">Branches draw from the center; dots pop in after.</div>
       </div>
     {% endif %}
   </div>
@@ -71,6 +66,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       const target = document.getElementById('svg-anim');
       if (!target) return;
+
+      const copyEl = document.getElementById('hero-copy');
+      if (copyEl) {
+        gsap.set(copyEl, { opacity: 0, y: 10 });
+      }
 
       fetch('/uploads/images/potatoes-heros.svg', { cache: 'no-cache' })
         .then(r => r.text())
@@ -202,6 +202,10 @@
                 branchGroup?.removeAttribute('mask');
                 gsap.set(branches, { opacity: 1 });
               }, [], REVEAL_END);
+
+            if (copyEl) {
+              tl.to(copyEl, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, DOTS_END);
+            }
 
             const pulseTargets = [...dots, center].filter(Boolean);
             if (pulseTargets.length) {
